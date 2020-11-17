@@ -47,3 +47,15 @@ def post_delete(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.delete()
     return redirect('post_list')
+
+
+def post_thumbs_up(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.thumbs_up()
+    return redirect('post_list')
+
+
+def post_thumbs_down(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.post_thumbs_down()
+    return redirect('post_list')    
