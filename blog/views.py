@@ -2,8 +2,9 @@ from django.shortcuts import render
 from .models import Post
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
-from .forms import PostForm
+from .forms import PostForm, GenerateRandomPosts
 from django.shortcuts import redirect
+from .tasks import create_random_posts
 
 
 def post_list(request):
@@ -49,6 +50,20 @@ def post_delete(request, pk):
     return redirect('post_list')
 
 
+def generate_random_posts(request):
+    if request.method != "POST":
+        form = GenerateRandomPosts()
+        return render(request, 'blog/create_random_posts.html', {'form': form})
+
+    form = GenerateRandomPosts(request.POST)
+    if form.is_valid():
+        amount = form.cleaned_data.get('amount')
+        # create_random_posts.delay(amount)
+        create_random_posts(amount)
+        return redirect('post_list')
+    else:
+        return render(request, 'blog/create_random_posts.html', {'form': form})
+
 def post_thumbs_up(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.thumbs_up()
@@ -58,4 +73,4 @@ def post_thumbs_up(request, pk):
 def post_thumbs_down(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.post_thumbs_down()
-    return redirect('post_list')    
+    return redirect('post_list')
