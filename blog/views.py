@@ -63,14 +63,3 @@ def generate_random_posts(request):
         return redirect('post_list')
     else:
         return render(request, 'blog/create_random_posts.html', {'form': form})
-
-def post_thumbs_up(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    post.thumbs_up()
-    return redirect('post_list')
-
-
-def post_thumbs_down(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    post.post_thumbs_down()
-    return redirect('post_list')
