@@ -3,7 +3,9 @@ from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
 from blog.models import Post
 from celery import shared_task
+from blog import periodic_tasks
 
+periodic_tasks.schedule()
 
 @shared_task
 def create_random_posts(amount):

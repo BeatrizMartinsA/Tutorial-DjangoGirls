@@ -58,8 +58,8 @@ def generate_random_posts(request):
     form = GenerateRandomPosts(request.POST)
     if form.is_valid():
         amount = form.cleaned_data.get('amount')
-        # create_random_posts.delay(amount)
-        create_random_posts(amount)
+        create_random_posts.delay(amount)
+        #create_random_posts(amount)
         return redirect('post_list')
     else:
         return render(request, 'blog/create_random_posts.html', {'form': form})
